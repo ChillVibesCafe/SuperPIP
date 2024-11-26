@@ -46,6 +46,7 @@ def detect_python_versions():
     for path in common_paths:
         if os.path.exists(path):
             for folder in os.listdir(path):
+                python_exec = ""
                 if sys.platform == "win32":
                     python_exec = os.path.join(path, folder, "python.exe")
                 else:
@@ -261,6 +262,7 @@ def fetch_all_packages():
 class ModuleCheckerThread(QThread):
     missing_modules_signal = pyqtSignal(list)
     all_modules_installed_signal = pyqtSignal()
+    progress_signal = pyqtSignal(int)  # Added signal
 
     def __init__(self, imports_text, module_to_package, python_exec, total_modules):
         super().__init__()
@@ -279,7 +281,7 @@ class ModuleCheckerThread(QThread):
                 missing_modules.append(module)
             processed += 1
             progress = int((processed / self.total_modules) * 100)
-            self.parent().update_module_checker_progress(progress)
+            self.progress_signal.emit(progress)  # Emit progress
         if missing_modules:
             self.missing_modules_signal.emit(missing_modules)
         else:
@@ -555,6 +557,7 @@ class LibraryDownloader(QMainWindow):
         )
         self.module_checker_thread.missing_modules_signal.connect(self.handle_missing_modules)
         self.module_checker_thread.all_modules_installed_signal.connect(self.handle_all_modules_installed)
+        self.module_checker_thread.progress_signal.connect(self.update_module_checker_progress)  # Connect signal
         self.module_checker_thread.start()
 
     def count_total_modules(self, imports_text):
