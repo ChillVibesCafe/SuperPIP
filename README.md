@@ -1,9 +1,4 @@
-#  ____                       ____ ___ ____  
- / ___| _   _ _ __   ___ _ __|  _ \_ _|  _ \ 
- \___ \| | | | '_ \ / _ \ '__| |_) | || |_) |
- ___) | |_| | |_) |  __/ |  |  __/| ||  __/ 
-|____/ \__,_| .__/ \___|_|  |_|  |___|_|    
-            |_|                              The Ultimate Python Library Manager
+# SuperPIP: The Ultimate Python Library Manager
 
 **SuperPip** is a powerful, user-friendly Python library manager that combines seamless library installation, module checking, and multi-environment support—all within a modern graphical interface. Built with PyQt5, SuperPip is designed to help developers easily manage Python libraries, detect missing modules, and handle installation across multiple Python versions.
 
