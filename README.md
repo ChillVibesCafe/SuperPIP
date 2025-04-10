@@ -2,6 +2,8 @@
 
 **SuperPip** is a powerful, user-friendly Python library manager that combines seamless library installation, module checking, and multi-environment support—all within a modern graphical interface. Built with PyQt5, SuperPip is designed to help developers easily manage Python libraries, detect missing modules, and handle installation across multiple Python versions.
 
+<pre> ``` your code here ``` </pre>
+
 ### Key Features:
 
 - **Library Downloader**
