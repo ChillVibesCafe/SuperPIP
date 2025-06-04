@@ -344,15 +344,15 @@ class LibraryDownloader(QMainWindow):
         self.python_dropdown.currentIndexChanged.connect(self.on_python_selection_change)
 
         # Check Python Installations Button
-      #  self.check_installs_button = QPushButton("Check Python Installations")
-      #  self.check_installs_button.clicked.connect(self.check_python_installations)
+        self.check_installs_button = QPushButton("Check Python Installations")
+        self.check_installs_button.clicked.connect(self.check_python_installations)
 
         # View Installed Libraries Button
         self.view_installed_button = QPushButton("View Installed Libraries")
         self.view_installed_button.setEnabled(False)
         self.view_installed_button.clicked.connect(self.view_installed_libraries)
 
-     #   python_layout.addWidget(self.check_installs_button)
+        python_layout.addWidget(self.check_installs_button)
         python_layout.addWidget(self.python_dropdown)
         python_layout.addWidget(self.view_installed_button)
 
