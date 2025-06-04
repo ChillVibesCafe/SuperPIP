@@ -439,8 +439,8 @@ class LibraryDownloader(QMainWindow):
         self.module_checker_python_dropdown.addItem("Select Installation")
         for version, exec_path in self.python_versions.items():
             self.module_checker_python_dropdown.addItem(f"{version} - {exec_path}", exec_path)
-        self.module_checker_python_dropdown.addItem("Install to All Python Installations", "all")
-        self.module_checker_python_dropdown.addItem("Install to Custom Directory", "custom")
+       # self.module_checker_python_dropdown.addItem("Install to All Python Installations", "all")
+       # self.module_checker_python_dropdown.addItem("Install to Custom Directory", "custom")
 
     # === Module Checker Methods ===
     def process_imports(self):
@@ -456,11 +456,12 @@ class LibraryDownloader(QMainWindow):
             QMessageBox.warning(self, "Error", "Please select a Python installation from the dropdown.")
             return
 
-        if selected_data in ("all", "custom"):
-            QMessageBox.warning(self, "Error", "Please select a specific Python installation to check modules.")
-            return
-        else:
-            python_exec = selected_data
+        python_exec = selected_data
+       # if selected_data in ("all", "custom"):
+       #     QMessageBox.warning(self, "Error", "Please select a specific Python installation to check modules.")
+       #     return
+       # else:
+       #     python_exec = selected_data
 
         self.selected_module_checker_python_exec = python_exec
         self.check_modules_button.setEnabled(False)
