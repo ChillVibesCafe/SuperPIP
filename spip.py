@@ -10,7 +10,8 @@ from PyQt5.QtWidgets import (
     QWidget, QHBoxLayout, QMessageBox, QProgressBar, QHeaderView,
     QFileDialog, QTextEdit, QListWidget, QInputDialog, QTabWidget
 )
-from PyQt5.QtCore import Qt, QThread, pyqtSignal, QTimer
+from PyQt5.QtCore import Qt, QThread, pyqtSignal, QTimer, QUrl
+from PyQt5.QtGui import QDesktopServices
 import requests
 from bs4 import BeautifulSoup  # For parsing HTML in fetch_all_packages
 import importlib
@@ -20,16 +21,16 @@ import re
 def show_console_loading_screen():
     global spinning  # Declare 'spinning' as global at the beginning
     ascii_text = r"""
- ____                        ____ ___ ____  
-/ ___| _   _ _ __   ___ _ __|  _ \_ _|  _ \ 
+ ____                        ____ ___ ____
+/ ___| _   _ _ __   ___ _ __|  _ \_ _|  _ \
 \___ \| | | | '_ \ / _ \ '__| |_) | || |_) |
- ___) | |_| | |_) |  __/ |  |  __/| ||  __/ 
-|____/ \__,_| .__/ \___|_|  |_|  |___|_|    
-            |_|                             
+ ___) | |_| | |_) |  __/ |  |  __/| ||  __/
+|____/ \__,_| .__/ \___|_|  |_|  |___|_|
+            |_|
 Loading...
 """
     print(ascii_text)
-    
+
     spinner = ['|', '/', '-', '\\']
     spinning = True  # Start the spinner
 
@@ -358,10 +359,11 @@ class LibraryDownloader(QMainWindow):
 
         # Table for Listing Libraries
         self.library_table = QTableWidget()
-        self.library_table.setColumnCount(2)
-        self.library_table.setHorizontalHeaderLabels(["Library Name", "Install Command"])
-        self.library_table.setColumnWidth(0, 500)
-        self.library_table.setColumnWidth(1, 300)
+        self.library_table.setColumnCount(3)
+        self.library_table.setHorizontalHeaderLabels(["Library Name", "Install Command", "Info"])
+        self.library_table.setColumnWidth(0, 400)
+        self.library_table.setColumnWidth(1, 250)
+        self.library_table.setColumnWidth(2, 100)
         self.library_table.setSelectionBehavior(QTableWidget.SelectRows)
         self.library_table.setEditTriggers(QTableWidget.NoEditTriggers)
         self.library_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
@@ -560,6 +562,9 @@ class LibraryDownloader(QMainWindow):
             self.library_table.insertRow(row_position)
             self.library_table.setItem(row_position, 0, QTableWidgetItem(pip_package))
             self.library_table.setItem(row_position, 1, QTableWidgetItem(f"pip install {pip_package}"))
+            info_button = QPushButton("Info")
+            info_button.clicked.connect(lambda _, pkg=pip_package: self.open_module_page(pkg))
+            self.library_table.setCellWidget(row_position, 2, info_button)
         self.current_index = next_index
 
     def on_scroll(self, value):
@@ -752,6 +757,10 @@ class LibraryDownloader(QMainWindow):
         except subprocess.CalledProcessError:
             QMessageBox.critical(self, "Error", "Failed to refresh installed libraries list.")
 
+    def open_module_page(self, package_name):
+        url = f"https://pypi.org/project/{package_name}/"
+        QDesktopServices.openUrl(QUrl(url))
+
     def closeEvent(self, event):
         reply = QMessageBox.question(
             self, 'Exit',
@@ -766,15 +775,15 @@ class LibraryDownloader(QMainWindow):
 # === Run the Application ===
 if __name__ == "__main__":
     finish_loading = show_console_loading_screen()  # Start the spinner
-    
+
     app = QApplication(sys.argv)
     main_window = LibraryDownloader()
     main_window.finish_loading = finish_loading  # Inject the callback
-    
+
     # Now, manually call check_python_installations() after finish_loading is set.
     main_window.check_python_installations()
-    
+
     # Delay showing the PyQt5 window by 1 second (1000 ms)
     QTimer.singleShot(1000, main_window.show)
-    
+
     sys.exit(app.exec())
